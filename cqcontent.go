@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"github.com/fatih/color"
 )
 
 // Generic error handling function
 func check(err error) {
 	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
+		color.Red("ERROR: %v\n", err)
 		os.Exit(1)
 	}
 }
@@ -29,11 +30,8 @@ func xml(node string, username string, password string) ([]byte, *os.File) {
 		Curl: cq.Curl{Fp: fp, Username: username, Password: password},
 		Node:  node}
 
-	// Take methods of Curler interface
-	lc := cq.Curler(listCurl)
-
 	// Get XML of cq package content for the given node
-	output := lc.Xml()
+	output := listCurl.Xml()
 
 	// Print the output
 	fmt.Printf("%s", output)
@@ -57,13 +55,36 @@ func list(node string, username string, password string) *os.File {
 		Curl: cq.Curl{Fp: fp, Username: username, Password: password},
 		Node:  node}
 
-	// Take methods of Curler interface
-	lc := cq.Curler(listCurl)
-
 	// Get XML of cq package content for the given node
-	lc.List()
+	listCurl.List()
 
 	return fp
+}
+
+// Download the package
+func download(node string,
+	          username string,
+	          password string,
+	          pkg string) *os.File {
+
+	// Initialize file and get pointer
+	fp, err := os.OpenFile(pkg, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0777)
+	check(err)
+
+	// Handle possible errors
+	check(err)
+
+	// Initialize struct
+	downloadCurl := cq.DownloadCurl{
+		ListCurl: cq.ListCurl{
+		Curl: cq.Curl{Fp: fp, Username: username, Password: password}, Node:  node},
+		Package: pkg}
+
+	// Get XML of cq package content for the given node
+	downloadCurl.Download()
+
+	return fp
+
 }
 
 func main() {
@@ -71,17 +92,23 @@ func main() {
 	arguments := argparse.ArgParse()
 
 	// If cmmand is list, then execute list command
-	if os.Args[1] == "xml" {
+	switch os.Args[1] {
+	case "xml":
 		_, fp := xml(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
-	} else if os.Args[1] == "list" {
+	case "list":
 		fp := list(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
+	case "download":
+		download(arguments["NODE"].(string),
+			arguments["USERNAME"].(string),
+			arguments["PASSWORD"].(string),
+			arguments["PACKAGE"].(string))
 	}
 }

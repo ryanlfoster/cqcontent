@@ -46,16 +46,15 @@ type ListCurl struct {
 
 // Augmented struct to hold content package value and node
 type DownloadCurl struct {
-	Curl
-	Node string
+	ListCurl
 	Package string
 }
 
 // Interface for list of methods that a Curler should support. See Decoder
 // implementation for information on the Crx type
-type Curler interface {
-	Xml() []byte
-	Decoder() *Crx
-	List()
-	Download()
-}
+//type Curler interface {
+//	Xml() []byte
+//	Decoder() *Crx
+//	List()
+//	Download() []byte
+//}

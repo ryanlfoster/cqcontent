@@ -1,8 +1,6 @@
 package cq
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // Implementation of the List method. See Decoder method for more information
 func (lc ListCurl) List() {
