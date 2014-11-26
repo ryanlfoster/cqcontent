@@ -1,16 +1,14 @@
 package main
 
 import (
-	"cqcontent/argparse"
-	"cqcontent/cq"
 	"fmt"
+	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
-	"github.com/fatih/color"
 )
 
 // Generic error handling function
-func check(err error) {
+func Check(err error) {
 	if err != nil {
 		color.Red("ERROR: %v\n", err)
 		os.Exit(1)
@@ -18,17 +16,23 @@ func check(err error) {
 }
 
 // Print the XML data for the given host
-func xml(node string, username string, password string) ([]byte, *os.File) {
+func xmlWrapper(
+	node string,
+	username string,
+	password string) ([]byte, *os.File) {
+
 	// Initialize tempfile and get pointer
 	fp, err := ioutil.TempFile("", "cq")
 
 	// Handle possible errors
-	check(err)
+	Check(err)
 
 	// Initialize struct
-	listCurl := cq.ListCurl{
-		Curl: cq.Curl{Fp: fp, Username: username, Password: password},
-		Node:  node}
+	listCurl := ListCurl{
+		CurlFp: CurlFp{
+			Curl: Curl{Username: username, Password: password},
+		Fp: fp},
+	Node: node}
 
 	// Get XML of cq package content for the given node
 	output := listCurl.Xml()
@@ -43,17 +47,19 @@ func xml(node string, username string, password string) ([]byte, *os.File) {
 }
 
 // Print XML data parsed for now
-func list(node string, username string, password string) *os.File {
+func listWrapper(node string, username string, password string) *os.File {
 	// Initialize tempfile and get pointer
 	fp, err := ioutil.TempFile("", "cq")
 
 	// Handle possible errors
-	check(err)
+	Check(err)
 
 	// Initialize struct
-	listCurl := cq.ListCurl{
-		Curl: cq.Curl{Fp: fp, Username: username, Password: password},
-		Node:  node}
+	listCurl := ListCurl{
+		CurlFp: CurlFp{
+			Curl: Curl{Username: username, Password: password},
+		Fp: fp},
+	Node: node}
 
 	// Get XML of cq package content for the given node
 	listCurl.List()
@@ -62,23 +68,27 @@ func list(node string, username string, password string) *os.File {
 }
 
 // Download the package
-func download(node string,
-	          username string,
-	          password string,
-	          pkg string) *os.File {
+func downloadWrapper(node string,
+	username string,
+	password string,
+	pkg string) *os.File {
 
 	// Initialize file and get pointer
-	fp, err := os.OpenFile(pkg, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0777)
-	check(err)
+	fp, err := os.OpenFile(pkg, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
+	Check(err)
 
 	// Handle possible errors
-	check(err)
+	Check(err)
 
 	// Initialize struct
-	downloadCurl := cq.DownloadCurl{
-		ListCurl: cq.ListCurl{
-		Curl: cq.Curl{Fp: fp, Username: username, Password: password}, Node:  node},
-		Package: pkg}
+	downloadCurl := DownloadCurl{
+		ListCurl: ListCurl{
+			CurlFp: CurlFp{
+				Curl: Curl{Username: username, Password: password},
+			Fp: fp},
+		Node: node},
+	Package: pkg}
+
 
 	// Get XML of cq package content for the given node
 	downloadCurl.Download()
@@ -87,26 +97,46 @@ func download(node string,
 
 }
 
+func uploadWrapper(node string,
+	username string,
+	password string,
+	pkg string) {
+
+	// Initialize struct
+	uploadCurl := UploadCurl{
+		Curl: Curl{Username: username, Password: password},
+		Node: node, Package: pkg}
+
+	// Get XML of cq package content for the given node
+	uploadCurl.Upload()
+
+}
+
 func main() {
 	// Parse arguments to program
-	arguments := argparse.ArgParse()
+	arguments := ArgParse()
 
 	// If cmmand is list, then execute list command
 	switch os.Args[1] {
 	case "xml":
-		_, fp := xml(arguments["NODE"].(string),
+		_, fp := xmlWrapper(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
 	case "list":
-		fp := list(arguments["NODE"].(string),
+		fp := listWrapper(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
 	case "download":
-		download(arguments["NODE"].(string),
+		downloadWrapper(arguments["NODE"].(string),
+			arguments["USERNAME"].(string),
+			arguments["PASSWORD"].(string),
+			arguments["PACKAGE"].(string))
+	case "upload":
+		uploadWrapper(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			arguments["PACKAGE"].(string))

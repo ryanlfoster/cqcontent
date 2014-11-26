@@ -1,4 +1,4 @@
-package cq
+package main
 
 import (
 	"fmt"
@@ -30,11 +30,11 @@ func (lc ListCurl) Xml() []byte {
 
 	// Get to work
 	err := easy.Perform()
-	check(err)
+	Check(err)
 
 	// Read xml into a variable
 	output, err := ioutil.ReadFile(lc.Fp.Name())
-	check(err)
+	Check(err)
 
 	// go-curl doesn't error on authentication failure. However, if we have a
 	// zero length string, then authentication or connection probably failed.

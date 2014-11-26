@@ -5,20 +5,12 @@ http://curl.haxx.se/libcurl/c/libcurl-tutorial.html
 https://github.com/andelf/go-curl/
 */
 
-package cq
+package main
 
 import (
-	"fmt"
 	"os"
+	"fmt"
 )
-
-// Generic exception handling in event of failure
-func check(err error) {
-	if err != nil {
-		fmt.Printf("ERROR: %v\n", err)
-		os.Exit(1)
-	}
-}
 
 // callback function for OPT_WRITEFUNCTION. See libcurl docs.
 func WriteData(ptr []byte, userdata interface{}) bool {
@@ -31,16 +23,32 @@ func WriteData(ptr []byte, userdata interface{}) bool {
 	}
 }
 
-// Create generic struct to hold values for variable curling
+// Progress for uploading
+func UploadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
+	fmt.Printf("Uploading %3.2f%%\r", ulnow/ultotal*100)
+	return true
+}
+
+// Progress for downloading
+func DownloadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
+	fmt.Printf("Downloading %3.2f%%\r", dlnow/dltotal*100)
+	return true
+}
+
 type Curl struct {
-	Fp       *os.File
 	Username string
 	Password string
 }
 
+// Create generic struct to hold values for variable curling
+type CurlFp struct {
+	Curl
+	Fp       *os.File
+}
+
 // Augmented struct to hold node value
 type ListCurl struct {
-	Curl
+	CurlFp
 	Node string
 }
 
@@ -50,11 +58,9 @@ type DownloadCurl struct {
 	Package string
 }
 
-// Interface for list of methods that a Curler should support. See Decoder
-// implementation for information on the Crx type
-//type Curler interface {
-//	Xml() []byte
-//	Decoder() *Crx
-//	List()
-//	Download() []byte
-//}
+// Augmented struct to hold pkgpath and node value
+type UploadCurl struct {
+	Curl
+	Node string
+	Package string
+}

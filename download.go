@@ -1,4 +1,4 @@
-package cq
+package main
 
 import (
 	"github.com/fatih/color"
@@ -56,11 +56,11 @@ func (dc DownloadCurl) Download() []byte {
 
 	// Get to work
 	err := easy.Perform()
-	check(err)
+	Check(err)
 
 	// Read xml into a variable
 	output, err := ioutil.ReadFile(dc.Fp.Name())
-	check(err)
+	Check(err)
 
 	// go-curl doesn't error on authentication failure. However, if we have a
 	// zero length string, then authentication or connection probably failed.
