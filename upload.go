@@ -5,43 +5,28 @@ import (
 	"github.com/fatih/color"
 	"os"
 	"fmt"
-	"path/filepath"
 )
 
-func (uc UploadCurl) CheckUploaded() bool {
+func (uc UploadCurl) CheckUploaded() (bool, *Package) {
 	pkgFound := false
 	var decoder *Crx
 	decoder = uc.Decoder()
+	var foundPackage *Package
 	for _, p := range decoder.Response.Data.Packages.Packages {
-		if p.DownloadName == filepath.Base(uc.Package) {
+		if p.DownloadName == RelPath(uc.Package) {
 			pkgFound = true
 			uc.Uploaded = true
+			foundPackage = &p
 			break
 		}
 	}
-	return pkgFound
+	return pkgFound, foundPackage
 }
-
-// Move to install.go when working on that
-//func (uc UploadCurl) CheckInstalled() bool {
-//	pkgFound := false
-//	var decoder *Crx
-//	decoder = Decoder()
-//	for _, p := range decoder.Response.Data.Packages.Packages {
-//		if p.DownloadName.(string) == filepath.Base(uc.Package.(string)) {
-//			if p.LastUnpackedBy != nil {
-//				pkgFound = true
-//				break
-//			}
-//		}
-//	}
-//	return found
-//}
-
 
 func (uc UploadCurl) Upload() {
 
-	if uc.CheckUploaded() == true {
+	result, _ := uc.CheckUploaded()
+	if result == true {
 		color.Yellow("%s is already uploaded. Moving along...", uc.Package)
 		return
 	}
@@ -80,4 +65,17 @@ func (uc UploadCurl) Upload() {
 	// Get to work
 	err := easy.Perform()
 	Check(err)
+}
+
+func (uc UploadCurl) VerifyUpload() {
+	// Verify upload
+	uploaded, _ := uc.CheckUploaded()
+	if uploaded == false {
+		color.Red("The package %s failed to upload.", RelPath(uc.Package))
+		os.Exit(1)
+	} else {
+		fmt.Print("The package %s has been uploaded to %s",
+			RelPath(uc.Package),
+			uc.Node)
+	}
 }

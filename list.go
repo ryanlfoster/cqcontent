@@ -7,11 +7,11 @@ func (lc ListCurl) List() {
 	var decoder *Crx
 	decoder = lc.Decoder()
 
-	// Loop through every package. If the value of lastUnpackedBy is an empty
+	// Loop through every package. If the value of lastUnpackedBy is null
 	// then the package was only uploaded, and not installed. With that said
 	// only print installed packages.
 	for _, p := range decoder.Response.Data.Packages.Packages {
-		if p.LastUnpackedBy != "" {
+		if p.LastUnpackedBy != "null" {
 			fmt.Printf("%s\n", p.DownloadName)
 		}
 	}

@@ -38,8 +38,6 @@ func (dc DownloadCurl) Download() []byte {
 			dc.Package)
 	}
 
-	fmt.Printf("%s\n", url)
-
 	easy := curl.EasyInit()
 	defer easy.Cleanup()
 
