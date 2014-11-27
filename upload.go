@@ -5,9 +5,46 @@ import (
 	"github.com/fatih/color"
 	"os"
 	"fmt"
+	"path/filepath"
 )
 
+func (uc UploadCurl) CheckUploaded() bool {
+	pkgFound := false
+	var decoder *Crx
+	decoder = uc.Decoder()
+	for _, p := range decoder.Response.Data.Packages.Packages {
+		if p.DownloadName == filepath.Base(uc.Package) {
+			pkgFound = true
+			uc.Uploaded = true
+			break
+		}
+	}
+	return pkgFound
+}
+
+// Move to install.go when working on that
+//func (uc UploadCurl) CheckInstalled() bool {
+//	pkgFound := false
+//	var decoder *Crx
+//	decoder = Decoder()
+//	for _, p := range decoder.Response.Data.Packages.Packages {
+//		if p.DownloadName.(string) == filepath.Base(uc.Package.(string)) {
+//			if p.LastUnpackedBy != nil {
+//				pkgFound = true
+//				break
+//			}
+//		}
+//	}
+//	return found
+//}
+
+
 func (uc UploadCurl) Upload() {
+
+	if uc.CheckUploaded() == true {
+		color.Yellow("%s is already uploaded. Moving along...", uc.Package)
+		return
+	}
 
 	result, filePath := FileExists(uc.Package)
 	if result == false {

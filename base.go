@@ -60,7 +60,7 @@ type DownloadCurl struct {
 
 // Augmented struct to hold pkgpath and node value
 type UploadCurl struct {
-	Curl
-	Node string
+	ListCurl
 	Package string
+	Uploaded bool
 }

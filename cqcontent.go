@@ -102,10 +102,20 @@ func uploadWrapper(node string,
 	password string,
 	pkg string) {
 
+	// Initialize tempfile and get pointer
+	fp, err := ioutil.TempFile("", "cq")
+
+	// Handle possible errors
+	Check(err)
+
 	// Initialize struct
 	uploadCurl := UploadCurl{
-		Curl: Curl{Username: username, Password: password},
-		Node: node, Package: pkg}
+		ListCurl: ListCurl{
+			CurlFp: CurlFp{
+				Curl: Curl{Username: username, Password: password},
+			Fp: fp},
+		Node: node},
+	Package: pkg, Uploaded: false}
 
 	// Get XML of cq package content for the given node
 	uploadCurl.Upload()
