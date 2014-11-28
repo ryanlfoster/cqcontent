@@ -1,34 +1,34 @@
 package main
 
 import (
-	"github.com/fatih/color"
 	"encoding/json"
-	"io/ioutil"
 	"fmt"
+	"github.com/fatih/color"
+	"io/ioutil"
 	"os"
 )
 
 // Use this struct for CheckValueLoop so you can check for nil against pointers
 // to strings for unset values
 type JobValidate struct {
-	Mode string `json:"mode"`
-	TargetNode *string `json:"target_node"`
+	Mode           string  `json:"mode"`
+	TargetNode     *string `json:"target_node"`
 	TargetUsername *string `json:"target_username"`
 	TargetPassword *string `json:"target_password"`
-	Package *string `json:"package"`
+	Package        *string `json:"package"`
 }
 
 // Use this struct for the JobLoop
 type Job struct {
-	Mode string `json:"mode"`
-	TargetNode string `json:"target_node"`
+	Mode           string `json:"mode"`
+	TargetNode     string `json:"target_node"`
 	TargetUsername string `json:"target_username"`
 	TargetPassword string `json:"target_password"`
-	Package string `json:"package"`
+	Package        string `json:"package"`
 }
 
 func isJSON(d []byte) bool {
-    var jv []JobValidate
+	var jv []JobValidate
 	err := json.Unmarshal(d, &jv)
 	if err != nil {
 		return false
@@ -37,7 +37,7 @@ func isJSON(d []byte) bool {
 	}
 }
 
-func CheckValueLoop (path string) {
+func CheckValueLoop(path string) {
 	jbytes, err := ioutil.ReadFile(path)
 	Check(err)
 
@@ -100,7 +100,7 @@ package
 	}
 }
 
-func JobLoop (path string) {
+func JobLoop(path string) {
 	jbytes, err := ioutil.ReadFile(path)
 	Check(err)
 
@@ -110,18 +110,21 @@ func JobLoop (path string) {
 	for _, job := range jobs {
 		switch job.Mode {
 		case "xml":
-			bytes, fp := xmlWrapper(job.TargetNode,
+			bytes, fp := XmlWrapper(
+				job.TargetNode,
 				job.TargetUsername,
 				job.TargetPassword)
 			fmt.Printf("%s\n", bytes)
 			os.Remove(fp.Name())
 		case "list":
-			fp := listWrapper(job.TargetNode,
+			fp := ListWrapper(
+				job.TargetNode,
 				job.TargetUsername,
 				job.TargetPassword)
 			os.Remove(fp.Name())
 		case "download":
-			downloadWrapper(job.TargetNode,
+			DownloadWrapper(
+				job.TargetNode,
 				job.TargetUsername,
 				job.TargetPassword,
 				job.Package)

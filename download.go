@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/fatih/color"
-	"os"
-	curl "github.com/andelf/go-curl"
 	"fmt"
+	curl "github.com/andelf/go-curl"
+	"github.com/fatih/color"
 	"io/ioutil"
+	"os"
 )
 
 func (dc DownloadCurl) Download() []byte {
@@ -74,7 +74,7 @@ func (dc DownloadCurl) Download() []byte {
 	easy.Setopt(curl.OPT_VERBOSE, 1)
 
 	// Setup Progress
-//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
+	//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
 
 	// Get to work
 	err = easy.Perform()

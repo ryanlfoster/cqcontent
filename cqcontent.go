@@ -12,29 +12,33 @@ func main() {
 	// Call the wrapper function based on the sub-command passed as first arg
 	switch os.Args[1] {
 	case "file":
-		jsonWrapper(os.Args[2])
+		JsonWrapper(os.Args[2])
 	case "xml":
-		_, fp := xmlWrapper(arguments["NODE"].(string),
+		_, fp := XmlWrapper(
+			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
 
 	case "list":
-		fp := listWrapper(arguments["NODE"].(string),
+		fp := ListWrapper(
+			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
 
 	case "download":
-		downloadWrapper(arguments["NODE"].(string),
+		DownloadWrapper(
+			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			arguments["PACKAGE"].(string))
 
 	case "upload":
-		fp := uploadWrapper(arguments["NODE"].(string),
+		fp := UploadWrapper(
+			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			arguments["PACKAGE"].(string))
@@ -78,7 +82,8 @@ func main() {
 		}
 
 		// Pass all arguments and options to the installWrapper
-		fp := installWrapper(arguments["NODE"].(string),
+		fp := InstallWrapper(
+			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			arguments["PACKAGE"].(string),

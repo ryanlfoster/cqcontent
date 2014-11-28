@@ -1,14 +1,14 @@
 package main
 
 import (
-	"regexp"
-	"os"
-	"path/filepath"
-	"github.com/fatih/color"
 	"bufio"
-	"io"
 	"bytes"
 	"fmt"
+	"github.com/fatih/color"
+	"io"
+	"os"
+	"path/filepath"
+	"regexp"
 )
 
 // Generic error handling function
@@ -33,23 +33,23 @@ func WriteData(ptr []byte, userdata interface{}) bool {
 
 	// Loop until break
 	for {
-	 	// read 1024 bytes and return actual number of bytes read into n
-        nin, err := reader.Read(buf)
-        if err != nil && err != io.EOF {
-            panic(err)
-        }
+		// read 1024 bytes and return actual number of bytes read into n
+		nin, err := reader.Read(buf)
+		if err != nil && err != io.EOF {
+			panic(err)
+		}
 		// If we have nothing left to read, then break
-        if nin == 0 {
-            break
-        }
+		if nin == 0 {
+			break
+		}
 
-        // write a buffer data from 0 to number of bytes read
-        nout, err := writer.Write(buf[:nin])
+		// write a buffer data from 0 to number of bytes read
+		nout, err := writer.Write(buf[:nin])
 		if err != nil {
-            panic(err)
-        }
+			panic(err)
+		}
 		fmt.Printf("%d bytes written\n", nout)
-    }
+	}
 
 	// Flush the writer after we're done writing
 	err := writer.Flush()
@@ -60,7 +60,7 @@ func WriteData(ptr []byte, userdata interface{}) bool {
 	return true
 }
 
-func IsRelative (str string) bool {
+func IsRelative(str string) bool {
 	regex, err := regexp.Compile("/")
 	if err != nil {
 		color.Red("%v\n", err)
@@ -75,7 +75,7 @@ func IsRelative (str string) bool {
 	}
 }
 
-func FullPath (str string) string {
+func FullPath(str string) string {
 	if IsRelative(str) == true {
 		absPath, err := filepath.Abs(str)
 		Check(err)
@@ -86,7 +86,7 @@ func FullPath (str string) string {
 	}
 }
 
-func RelPath (str string) string {
+func RelPath(str string) string {
 	if IsRelative(str) == false {
 		relPath := filepath.Base(str)
 		return relPath
@@ -96,7 +96,7 @@ func RelPath (str string) string {
 	}
 }
 
-func FileExists (str string) (bool, string) {
+func FileExists(str string) (bool, string) {
 	absPath := FullPath(str)
 	if _, err := os.Stat(absPath); err == nil {
 		return true, absPath

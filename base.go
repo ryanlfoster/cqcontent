@@ -9,10 +9,9 @@ the --libcurl option to the curl binary is your friend.
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 )
-
 
 // Progress for uploading
 func UploadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
@@ -34,7 +33,7 @@ type Curl struct {
 // Create generic struct to hold values for variable curling
 type CurlFp struct {
 	Curl
-	Fp       *os.File
+	Fp *os.File
 }
 
 // Augmented struct to hold node value
@@ -72,11 +71,10 @@ type UploadCurl struct {
 // http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Installing packages (CLI)
 type InstallCurl struct {
 	UploadCurl
-	Installed bool
-	Autosave int64
-	Recursive bool
-	AcIgnore bool
+	Installed   bool
+	Autosave    int64
+	Recursive   bool
+	AcIgnore    bool
 	AcOverwrite bool
-	AcClear bool
+	AcClear     bool
 }
-

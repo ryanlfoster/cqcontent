@@ -7,13 +7,13 @@ import (
 )
 
 // Do work based on the json configuraiton file
-func jsonWrapper(path string) {
+func JsonWrapper(path string) {
 	CheckValueLoop(path)
 	JobLoop(path)
 }
 
 // Print the XML data for the given host
-func xmlWrapper(
+func XmlWrapper(
 	node string,
 	username string,
 	password string) ([]byte, *os.File) {
@@ -28,8 +28,8 @@ func xmlWrapper(
 	listCurl := ListCurl{
 		CurlFp: CurlFp{
 			Curl: Curl{Username: username, Password: password},
-		Fp: fp},
-	Node: node}
+			Fp:   fp},
+		Node: node}
 
 	// Get XML of cq package content for the given node
 	output := listCurl.Xml()
@@ -44,7 +44,11 @@ func xmlWrapper(
 }
 
 // Print XML data parsed for now
-func listWrapper(node string, username string, password string) *os.File {
+func ListWrapper(
+	node string,
+	username string,
+	password string) *os.File {
+
 	// Initialize tempfile and get pointer
 	fp, err := ioutil.TempFile("", "cq")
 
@@ -65,7 +69,8 @@ func listWrapper(node string, username string, password string) *os.File {
 }
 
 // Download the package
-func downloadWrapper(node string,
+func DownloadWrapper(
+	node string,
 	username string,
 	password string,
 	pkg string) *os.File {
@@ -74,19 +79,18 @@ func downloadWrapper(node string,
 	fp, err := os.OpenFile(pkg, os.O_WRONLY|os.O_CREATE, 0777)
 	Check(err)
 	defer func() {
-        err := fp.Close()
+		err := fp.Close()
 		Check(err)
-    }()
+	}()
 
 	// Initialize struct
 	downloadCurl := DownloadCurl{
 		ListCurl: ListCurl{
 			CurlFp: CurlFp{
 				Curl: Curl{Username: username, Password: password},
-			Fp: fp},
+			Fp:   fp},
 		Node: node},
 	Package: pkg}
-
 
 	// Get XML of cq package content for the given node
 	downloadCurl.Download()
@@ -95,7 +99,8 @@ func downloadWrapper(node string,
 
 }
 
-func uploadWrapper(node string,
+func UploadWrapper(
+	node string,
 	username string,
 	password string,
 	pkg string) *os.File {
@@ -112,7 +117,7 @@ func uploadWrapper(node string,
 			ListCurl: ListCurl{
 				CurlFp: CurlFp{
 					Curl: Curl{Username: username, Password: password},
-				Fp: fp},
+				Fp:   fp},
 			Node: node},
 		Package: pkg},
 	Uploaded: false}
@@ -124,7 +129,8 @@ func uploadWrapper(node string,
 
 }
 
-func installWrapper(node string,
+func InstallWrapper(
+	node string,
 	username string,
 	password string,
 	pkg string,
@@ -147,12 +153,11 @@ func installWrapper(node string,
 				ListCurl: ListCurl{
 					CurlFp: CurlFp{
 						Curl: Curl{Username: username, Password: password},
-					Fp: fp},
+					Fp:   fp},
 				Node: node},
 			Package: pkg},
 		Uploaded: false},
 	Installed: false, Autosave: autosave, Recursive: recursive, AcIgnore: acIgnore, AcOverwrite: acOverwrite, AcClear: acClear}
-
 
 	// Get XML of cq package content for the given node
 	installCurl.Install()

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	curl "github.com/andelf/go-curl"
+	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
-	"github.com/fatih/color"
 )
 
 // Implementation of Xml()

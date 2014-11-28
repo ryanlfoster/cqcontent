@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
 	curl "github.com/andelf/go-curl"
 	"github.com/fatih/color"
 	"os"
-	"fmt"
 )
 
 func (uc UploadCurl) CheckUploaded() (bool, *Package) {

@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
 	curl "github.com/andelf/go-curl"
 	"github.com/fatih/color"
 	"os"
-	"fmt"
 	"path/filepath"
 )
 
@@ -24,7 +24,7 @@ func (ic InstallCurl) CheckInstalled() bool {
 	return pkgFound
 }
 
-func (ic InstallCurl) Install()  {
+func (ic InstallCurl) Install() {
 	var url string
 	fileName := RelPath(ic.Package)
 
