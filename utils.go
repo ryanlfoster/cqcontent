@@ -5,6 +5,10 @@ import (
 	"os"
 	"path/filepath"
 	"github.com/fatih/color"
+	"bufio"
+	"io"
+	"bytes"
+	"fmt"
 )
 
 // Generic error handling function
@@ -17,13 +21,43 @@ func Check(err error) {
 
 // callback function for OPT_WRITEFUNCTION. See libcurl docs.
 func WriteData(ptr []byte, userdata interface{}) bool {
+	// Create ptr reference to tempfile to which we are writing
+	writePtr := userdata.(*os.File)
 
-	file := userdata.(*os.File)
-	if _, err := file.Write(ptr); err != nil {
-		return false
-	} else {
-		return true
+	// Create a bufio reader and writer
+	reader := bufio.NewReader(bytes.NewReader(ptr))
+	writer := bufio.NewWriter(writePtr)
+
+	// Create a buffer of 1024 bytes
+	buf := make([]byte, 1024)
+
+	// Loop until break
+	for {
+	 	// read 1024 bytes and return actual number of bytes read into n
+        nin, err := reader.Read(buf)
+        if err != nil && err != io.EOF {
+            panic(err)
+        }
+		// If we have nothing left to read, then break
+        if nin == 0 {
+            break
+        }
+
+        // write a buffer data from 0 to number of bytes read
+        nout, err := writer.Write(buf[:nin])
+		if err != nil {
+            panic(err)
+        }
+		fmt.Printf("%d bytes written\n", nout)
+    }
+
+	// Flush the writer after we're done writing
+	err := writer.Flush()
+	if err != nil {
+		panic(err)
 	}
+
+	return true
 }
 
 func IsRelative (str string) bool {

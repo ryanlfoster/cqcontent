@@ -71,11 +71,12 @@ func downloadWrapper(node string,
 	pkg string) *os.File {
 
 	// Initialize file and get pointer
-	fp, err := os.OpenFile(pkg, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
+	fp, err := os.OpenFile(pkg, os.O_WRONLY|os.O_CREATE, 0777)
 	Check(err)
-
-	// Handle possible errors
-	Check(err)
+	defer func() {
+        err := fp.Close()
+		Check(err)
+    }()
 
 	// Initialize struct
 	downloadCurl := DownloadCurl{

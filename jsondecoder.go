@@ -15,6 +15,7 @@ type JobValidate struct {
 	TargetNode *string `json:"target_node"`
 	TargetUsername *string `json:"target_username"`
 	TargetPassword *string `json:"target_password"`
+	Package *string `json:"package"`
 }
 
 // Use this struct for the JobLoop
@@ -23,6 +24,7 @@ type Job struct {
 	TargetNode string `json:"target_node"`
 	TargetUsername string `json:"target_username"`
 	TargetPassword string `json:"target_password"`
+	Package string `json:"package"`
 }
 
 func isJSON(d []byte) bool {
@@ -77,6 +79,23 @@ target_password
 				`)
 				os.Exit(1)
 			}
+		case "download":
+			if job.TargetNode == nil ||
+				job.TargetUsername == nil ||
+				job.TargetPassword == nil ||
+				job.Package == nil {
+
+				color.Red(`
+The following settings are requred for the xml job:
+
+target_node
+target_username
+target_password
+package
+					`)
+				os.Exit(1)
+
+			}
 		}
 	}
 }
@@ -101,6 +120,11 @@ func JobLoop (path string) {
 				job.TargetUsername,
 				job.TargetPassword)
 			os.Remove(fp.Name())
+		case "download":
+			downloadWrapper(job.TargetNode,
+				job.TargetUsername,
+				job.TargetPassword,
+				job.Package)
 		}
 	}
 }

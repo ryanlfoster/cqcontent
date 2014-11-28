@@ -38,6 +38,15 @@ func (dc DownloadCurl) Download() []byte {
 			dc.Package)
 	}
 
+	// Write headers here
+	headerPtr, err := ioutil.TempFile("", "cq")
+	Check(err)
+	// Close and remove when done with the file
+	defer func() {
+		headerPtr.Close()
+		os.Remove(headerPtr.Name())
+	}()
+
 	easy := curl.EasyInit()
 	defer easy.Cleanup()
 
@@ -52,8 +61,23 @@ func (dc DownloadCurl) Download() []byte {
 	// Store file pointer
 	easy.Setopt(curl.OPT_WRITEDATA, dc.Fp)
 
+	// Set HeaderFunction
+	easy.Setopt(curl.OPT_HEADERFUNCTION, WriteData)
+
+	// Set Header Data
+	easy.Setopt(curl.OPT_HEADERDATA, headerPtr)
+
+	// Print upload progress
+	easy.Setopt(curl.OPT_NOPROGRESS, true)
+
+	// Set verbose
+	easy.Setopt(curl.OPT_VERBOSE, 1)
+
+	// Setup Progress
+//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
+
 	// Get to work
-	err := easy.Perform()
+	err = easy.Perform()
 	Check(err)
 
 	// Read xml into a variable
