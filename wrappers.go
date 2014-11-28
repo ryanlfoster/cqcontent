@@ -8,6 +8,7 @@ import (
 
 // Do work based on the json configuraiton file
 func jsonWrapper(path string) {
+	CheckValueLoop(path)
 	JobLoop(path)
 }
 
