@@ -12,6 +12,8 @@ curl API, which is documented here:
 [CQ Curl API](http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Managing Packages on the Command Line)
 ```
 Usage:
+Usage:
+  cqcontent file     CONFIG_FILE
   cqcontent xml      (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
