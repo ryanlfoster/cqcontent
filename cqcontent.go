@@ -11,6 +11,8 @@ func main() {
 
 	// Call the wrapper function based on the sub-command passed as first arg
 	switch os.Args[1] {
+	case "file":
+		jsonWrapper(os.Args[2])
 	case "xml":
 		_, fp := xmlWrapper(arguments["NODE"].(string),
 			arguments["USERNAME"].(string),

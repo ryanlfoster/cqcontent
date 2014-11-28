@@ -14,6 +14,7 @@ cqcontent
 Work with cq content packages on the command line
 
 Usage:
+  cqcontent file     CONFIG_FILE
   cqcontent xml      (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD

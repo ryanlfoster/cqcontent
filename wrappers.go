@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+// Do work based on the json configuraiton file
+func jsonWrapper(path string) {
+	JobLoop(path)
+}
+
 // Print the XML data for the given host
 func xmlWrapper(
 	node string,
