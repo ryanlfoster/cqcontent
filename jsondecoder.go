@@ -25,10 +25,25 @@ type Job struct {
 	TargetPassword string `json:"target_password"`
 }
 
+func isJSON(d []byte) bool {
+    var jv []JobValidate
+	err := json.Unmarshal(d, &jv)
+	if err != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
 func CheckValueLoop (path string) {
 	jbytes, err := ioutil.ReadFile(path)
 	Check(err)
 
+	if isJSON(jbytes) == false {
+		color.Red(`
+The json configuration file provided is not syntactically valid.
+		`)
+	}
 	var jobs []JobValidate
 	json.Unmarshal(jbytes, &jobs)
 
@@ -45,7 +60,6 @@ The following settings are requred for the xml job:
 target_node
 target_username
 target_password
-
 				`)
 				os.Exit(1)
 			}
@@ -60,7 +74,6 @@ The following settings are requred for the xml job:
 target_node
 target_username
 target_password
-
 				`)
 				os.Exit(1)
 			}
