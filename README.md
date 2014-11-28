@@ -25,9 +25,7 @@ but [native OS X unarchiving tools have problems with it](http://osxdaily.com/20
 
 See go-curl for more insight into Go's libcurl bindings if
 you care to hack on this project. Additionally, it relies on CQ's 
-curl API, which is documented here:
-
-[CQ Curl API](http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Managing Packages on the Command Line)
+curl API, which is documented here: [CQ Curl API](http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Managing Packages on the Command Line)
 ```
 Usage:
   cqcontent file     CONFIG_FILE
