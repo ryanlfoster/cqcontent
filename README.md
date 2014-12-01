@@ -53,6 +53,11 @@ Usage:
                      [--acIgnore]
                      [--acOverwrite]
                      [--acClear]
+  cqcontent delete   [options]
+                     (--node|-n) NODE
+                     (--username|-u) USERNAME
+                     (--password|-p) PASSWORD
+                     (--package|-k) PACKAGE
   cqcontent          [--help|-h|--version]
 
 Options:
