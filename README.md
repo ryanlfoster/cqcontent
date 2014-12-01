@@ -16,12 +16,7 @@ should be able to use remote execution tools to deploy the configuration file an
 on the file. 
 
 Allow users of json configuration file to upload and install a content package to an arbitrary 
-number of CQ nodes, concurently, in a single job. 
-
-###Current Issues
-Downloading zip files via the go-curl libcurl bindings writes more data than is present in the 
-original file (in the current implementation). The file can be unzipped with the unzip binary,
-but [native OS X unarchiving tools have problems with it](http://osxdaily.com/2013/02/13/open-zip-cpgz-file/). 
+number of CQ nodes, concurently, in a single job.
 
 See go-curl for more insight into Go's libcurl bindings if
 you care to hack on this project. Additionally, it relies on CQ's 
