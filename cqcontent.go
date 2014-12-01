@@ -3,29 +3,33 @@ package main
 import (
 	"os"
 	"strconv"
+	"fmt"
 )
 
 func main() {
 	// Parse arguments to program
 	arguments := ArgParse()
 
-	// Call the wrapper function based on the sub-command passed as first arg
+	// Call the wrapper function based on the sub-command passed as first arg.
+	// See wrapper.go for implementation of each wrapper function. See
+	// argparse.go for argument parsing implementation.
 	switch os.Args[1] {
 	case "file":
 		JsonWrapper(os.Args[2])
 	case "xml":
-		_, fp := XmlWrapper(
+		XmlWrapper(
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
-			arguments["PASSWORD"].(string))
-		// Remove tempfile
-		os.Remove(fp.Name())
+			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)))
 
 	case "list":
 		fp := ListWrapper(
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
-			arguments["PASSWORD"].(string))
+			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)))
+
 		// Remove tempfile
 		os.Remove(fp.Name())
 
@@ -34,6 +38,7 @@ func main() {
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)),
 			arguments["PACKAGE"].(string))
 
 	case "upload":
@@ -41,6 +46,7 @@ func main() {
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)),
 			arguments["PACKAGE"].(string))
 		// Remove tempfile
 		os.Remove(fp.Name())
@@ -86,6 +92,7 @@ func main() {
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)),
 			arguments["PACKAGE"].(string),
 			autosave,
 			recursive,

@@ -9,7 +9,18 @@ import (
 )
 
 // Implementation of Xml()
-func (lc ListCurl) Xml() []byte {
+func (lc ListCurl) Xml() ([]byte, *os.File) {
+
+	// Initialize tempfile and get pointer
+	fp, err := ioutil.TempFile("", "cq")
+
+	// Defer closing and removing of file to the end
+	defer func() {
+		err := fp.Close()
+		Check(err)
+		os.Remove(fp.Name())
+	}()
+
 	easy := curl.EasyInit()
 	defer easy.Cleanup()
 
@@ -26,14 +37,14 @@ func (lc ListCurl) Xml() []byte {
 	easy.Setopt(curl.OPT_WRITEFUNCTION, WriteData)
 
 	// Store file pointer
-	easy.Setopt(curl.OPT_WRITEDATA, lc.Fp)
+	easy.Setopt(curl.OPT_WRITEDATA, fp)
 
 	// Get to work
-	err := easy.Perform()
+	err = easy.Perform()
 	Check(err)
 
 	// Read xml into a variable
-	output, err := ioutil.ReadFile(lc.Fp.Name())
+	output, err := ioutil.ReadFile(fp.Name())
 	Check(err)
 
 	// go-curl doesn't error on authentication failure. However, if we have a
@@ -48,5 +59,5 @@ connection failure
 		os.Exit(1)
 	}
 
-	return output
+	return output, fp
 }

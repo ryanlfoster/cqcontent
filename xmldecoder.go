@@ -57,7 +57,7 @@ type Crx struct {
 // Implementation of Decoder()
 func (lc ListCurl) Decoder() *Crx {
 	// Get xml
-	output := lc.Xml()
+	output, _ := lc.Xml()
 
 	// Create a Crx object (the root of the xml)
 	var obj Crx

@@ -16,38 +16,29 @@ func JsonWrapper(path string) {
 func XmlWrapper(
 	node string,
 	username string,
-	password string) ([]byte, *os.File) {
-
-	// Initialize tempfile and get pointer
-	fp, err := ioutil.TempFile("", "cq")
-
-	// Handle possible errors
-	Check(err)
+	password string,
+	port int64) ([]byte, *os.File) {
 
 	// Initialize struct
 	listCurl := ListCurl{
-		CurlFp: CurlFp{
-			Curl: Curl{Username: username, Password: password},
-			Fp:   fp},
-		Node: node}
+		Curl: Curl{Username: username, Password: password, Port: port},
+	Node: node}
 
 	// Get XML of cq package content for the given node
-	output := listCurl.Xml()
+	output, fp := listCurl.Xml()
 
 	// Print the output
 	fmt.Printf("%s", output)
 
-	// Close the tempfile
-	fp.Close()
-
 	return output, fp
 }
 
-// Print XML data parsed for now
+// Print list of installed package for a given node
 func ListWrapper(
 	node string,
 	username string,
-	password string) *os.File {
+	password string,
+	port int64) *os.File {
 
 	// Initialize tempfile and get pointer
 	fp, err := ioutil.TempFile("", "cq")
@@ -57,9 +48,7 @@ func ListWrapper(
 
 	// Initialize struct
 	listCurl := ListCurl{
-		CurlFp: CurlFp{
-			Curl: Curl{Username: username, Password: password},
-		Fp: fp},
+		Curl: Curl{Username: username, Password: password, Port: port},
 	Node: node}
 
 	// Get XML of cq package content for the given node
@@ -73,29 +62,18 @@ func DownloadWrapper(
 	node string,
 	username string,
 	password string,
-	pkg string) *os.File {
-
-	// Initialize file and get pointer
-	fp, err := os.OpenFile(pkg, os.O_WRONLY|os.O_CREATE, 0777)
-	Check(err)
-	defer func() {
-		err := fp.Close()
-		Check(err)
-	}()
+	port int64,
+	pkg string) {
 
 	// Initialize struct
 	downloadCurl := DownloadCurl{
 		ListCurl: ListCurl{
-			CurlFp: CurlFp{
-				Curl: Curl{Username: username, Password: password},
-			Fp:   fp},
+			Curl: Curl{Username: username, Password: password, Port: port},
 		Node: node},
 	Package: pkg}
 
 	// Get XML of cq package content for the given node
 	downloadCurl.Download()
-
-	return fp
 
 }
 
@@ -103,6 +81,7 @@ func UploadWrapper(
 	node string,
 	username string,
 	password string,
+	port int64,
 	pkg string) *os.File {
 
 	// Initialize tempfile and get pointer
@@ -115,9 +94,7 @@ func UploadWrapper(
 	uploadCurl := UploadCurl{
 		DownloadCurl: DownloadCurl{
 			ListCurl: ListCurl{
-				CurlFp: CurlFp{
-					Curl: Curl{Username: username, Password: password},
-				Fp:   fp},
+				Curl: Curl{Username: username, Password: password, Port: port},
 			Node: node},
 		Package: pkg},
 	Uploaded: false}
@@ -133,6 +110,7 @@ func InstallWrapper(
 	node string,
 	username string,
 	password string,
+	port int64,
 	pkg string,
 	autosave int64,
 	recursive bool,
@@ -151,9 +129,7 @@ func InstallWrapper(
 		UploadCurl: UploadCurl{
 			DownloadCurl: DownloadCurl{
 				ListCurl: ListCurl{
-					CurlFp: CurlFp{
-						Curl: Curl{Username: username, Password: password},
-					Fp:   fp},
+						Curl: Curl{Username: username, Password: password, Port: port},
 				Node: node},
 			Package: pkg},
 		Uploaded: false},

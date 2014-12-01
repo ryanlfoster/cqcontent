@@ -1,17 +1,25 @@
 package main
 
 import (
-	"fmt"
 	curl "github.com/andelf/go-curl"
 	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
+	"fmt"
 )
 
 func (dc DownloadCurl) Download() []byte {
 	var decoder *Crx
 	var foundPackage *Package
 	var url string
+
+	// Initialize file and get pointer
+	fp, err := os.OpenFile(dc.Package, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
+	Check(err)
+	defer func() {
+		err := fp.Close()
+		Check(err)
+	}()
 
 	decoder = dc.Decoder()
 	for _, p := range decoder.Response.Data.Packages.Packages {
@@ -28,24 +36,17 @@ func (dc DownloadCurl) Download() []byte {
 	}
 
 	if foundPackage.Group != "" {
-		url = fmt.Sprintf("http://%s:8080/etc/packages/%s/%s",
+		url = fmt.Sprintf("http://%s:%d/etc/packages/%s/%s",
 			dc.Node,
+			dc.Port,
 			foundPackage.Group,
 			dc.Package)
 	} else {
-		url = fmt.Sprintf("http://%s:8080/etc/packages/%s",
+		url = fmt.Sprintf("http://%s:%d/etc/packages/%s",
 			dc.Node,
+			dc.Port,
 			dc.Package)
 	}
-
-	// Write headers here
-	headerPtr, err := ioutil.TempFile("", "cq")
-	Check(err)
-	// Close and remove when done with the file
-	defer func() {
-		headerPtr.Close()
-		os.Remove(headerPtr.Name())
-	}()
 
 	easy := curl.EasyInit()
 	defer easy.Cleanup()
@@ -59,29 +60,23 @@ func (dc DownloadCurl) Download() []byte {
 	easy.Setopt(curl.OPT_WRITEFUNCTION, WriteData)
 
 	// Store file pointer
-	easy.Setopt(curl.OPT_WRITEDATA, dc.Fp)
-
-	// Set HeaderFunction
-	easy.Setopt(curl.OPT_HEADERFUNCTION, WriteData)
-
-	// Set Header Data
-	easy.Setopt(curl.OPT_HEADERDATA, headerPtr)
+	easy.Setopt(curl.OPT_WRITEDATA, fp)
 
 	// Print upload progress
 	easy.Setopt(curl.OPT_NOPROGRESS, true)
 
-	// Set verbose
-	easy.Setopt(curl.OPT_VERBOSE, 1)
+	// Set connection timeout
+	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
 
-	// Setup Progress
-	//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
+//	// Setup Progress
+//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
 
 	// Get to work
 	err = easy.Perform()
 	Check(err)
 
 	// Read xml into a variable
-	output, err := ioutil.ReadFile(dc.Fp.Name())
+	output, err := ioutil.ReadFile(fp.Name())
 	Check(err)
 
 	// go-curl doesn't error on authentication failure. However, if we have a
@@ -89,8 +84,8 @@ func (dc DownloadCurl) Download() []byte {
 	// Notify the user and exit with an error code if that is the case
 	if string(output) == "" {
 		color.Red(`
-The output is a zero length string. This typically indicates authentication or
-connection failure
+The output is a zero length string. This typically indicates authentication
+failure
 
 `)
 		os.Exit(1)

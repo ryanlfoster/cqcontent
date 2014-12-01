@@ -3,12 +3,12 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"github.com/fatih/color"
 	"io"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 )
 
 // Generic error handling function
@@ -17,6 +17,13 @@ func Check(err error) {
 		color.Red("ERROR: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+// Convert string to int64
+func StrToInt(s string) int64 {
+	num, err := strconv.ParseInt(s, 10, 0)
+	Check(err)
+	return num
 }
 
 // callback function for OPT_WRITEFUNCTION. See libcurl docs.
@@ -44,11 +51,11 @@ func WriteData(ptr []byte, userdata interface{}) bool {
 		}
 
 		// write a buffer data from 0 to number of bytes read
-		nout, err := writer.Write(buf[:nin])
+		writer.Write(buf[:nin])
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%d bytes written\n", nout)
+
 	}
 
 	// Flush the writer after we're done writing

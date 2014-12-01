@@ -10,7 +10,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 // Progress for uploading
@@ -28,17 +27,12 @@ func DownloadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) boo
 type Curl struct {
 	Username string
 	Password string
-}
-
-// Create generic struct to hold values for variable curling
-type CurlFp struct {
-	Curl
-	Fp *os.File
+	Port	 int64
 }
 
 // Augmented struct to hold node value
 type ListCurl struct {
-	CurlFp
+	Curl
 	Node string
 }
 
