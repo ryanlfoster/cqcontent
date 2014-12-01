@@ -42,7 +42,7 @@ cqcontent
 Work with cq content packages on the command line
 
 Usage:
-  cqcontent file     [options] CONFIG_FILE
+  cqcontent file     CONFIG_FILE
   cqcontent xml      [options]
   					 (--node|-n) NODE
                      (--username|-u) USERNAME
