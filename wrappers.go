@@ -22,7 +22,7 @@ func XmlWrapper(
 	// Initialize struct
 	listCurl := ListCurl{
 		Curl: Curl{Username: username, Password: password, Port: port},
-	Node: node}
+		Node: node}
 
 	// Get XML of cq package content for the given node
 	output, fp := listCurl.Xml()
@@ -49,7 +49,7 @@ func ListWrapper(
 	// Initialize struct
 	listCurl := ListCurl{
 		Curl: Curl{Username: username, Password: password, Port: port},
-	Node: node}
+		Node: node}
 
 	// Get XML of cq package content for the given node
 	listCurl.List()
@@ -69,8 +69,8 @@ func DownloadWrapper(
 	downloadCurl := DownloadCurl{
 		ListCurl: ListCurl{
 			Curl: Curl{Username: username, Password: password, Port: port},
-		Node: node},
-	Package: pkg}
+			Node: node},
+		Package: pkg}
 
 	// Get XML of cq package content for the given node
 	downloadCurl.Download()
@@ -95,9 +95,9 @@ func UploadWrapper(
 		DownloadCurl: DownloadCurl{
 			ListCurl: ListCurl{
 				Curl: Curl{Username: username, Password: password, Port: port},
-			Node: node},
-		Package: pkg},
-	Uploaded: false}
+				Node: node},
+			Package: pkg},
+		Uploaded: false}
 
 	// Get XML of cq package content for the given node
 	uploadCurl.Upload()
@@ -129,11 +129,11 @@ func InstallWrapper(
 		UploadCurl: UploadCurl{
 			DownloadCurl: DownloadCurl{
 				ListCurl: ListCurl{
-						Curl: Curl{Username: username, Password: password, Port: port},
-				Node: node},
-			Package: pkg},
-		Uploaded: false},
-	Installed: false, Autosave: autosave, Recursive: recursive, AcIgnore: acIgnore, AcOverwrite: acOverwrite, AcClear: acClear}
+					Curl: Curl{Username: username, Password: password, Port: port},
+					Node: node},
+				Package: pkg},
+			Uploaded: false},
+		Installed: false, Autosave: autosave, Recursive: recursive, AcIgnore: acIgnore, AcOverwrite: acOverwrite, AcClear: acClear}
 
 	// Get XML of cq package content for the given node
 	installCurl.Install()

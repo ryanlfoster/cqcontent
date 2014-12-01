@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	curl "github.com/andelf/go-curl"
 	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
-	"fmt"
 )
 
 func (dc DownloadCurl) Download() []byte {
@@ -68,8 +68,8 @@ func (dc DownloadCurl) Download() []byte {
 	// Set connection timeout
 	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
 
-//	// Setup Progress
-//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
+	//	// Setup Progress
+	//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
 
 	// Get to work
 	err = easy.Perform()

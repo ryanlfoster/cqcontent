@@ -11,32 +11,32 @@ import (
 // Use this struct for CheckValueLoop so you can check for nil against pointers
 // to strings for unset values
 type JobValidate struct {
-	Mode           string  `json:"mode"`
-	Node           *string `json:"node"`
-	Username       *string `json:"username"`
-	Password       *string `json:"password"`
-	Package        *string `json:"package"`
-	Port           *int64  `json:"port"`
-	Autosave	   *int64  `json:"autosave"`
-	Recursive      *bool   `json:"recursive"`
-	AcIgnore       *bool   `json:"acIgnore"`
-	AcOverwrite    *bool   `json:"acOverwrite"`
-	AcClear        *bool   `json:"acClear"`
+	Mode        string  `json:"mode"`
+	Node        *string `json:"node"`
+	Username    *string `json:"username"`
+	Password    *string `json:"password"`
+	Package     *string `json:"package"`
+	Port        *int64  `json:"port"`
+	Autosave    *int64  `json:"autosave"`
+	Recursive   *bool   `json:"recursive"`
+	AcIgnore    *bool   `json:"acIgnore"`
+	AcOverwrite *bool   `json:"acOverwrite"`
+	AcClear     *bool   `json:"acClear"`
 }
 
 // Use this struct for the JobLoop
 type Job struct {
-	Mode           string `json:"mode"`
-	Node           string `json:"node"`
-	Username       string `json:"username"`
-	Password       string `json:"password"`
-	Package        string `json:"package"`
-	Port           int64  `json:"port"`
-	Autosave	   int64  `json:"autosave"`
-	Recursive      bool   `json:"recursive"`
-	AcIgnore       bool   `json:"acIgnore"`
-	AcOverwrite    bool   `json:"acOverwrite"`
-	AcClear        bool   `json:"acClear"`
+	Mode        string `json:"mode"`
+	Node        string `json:"node"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	Package     string `json:"package"`
+	Port        int64  `json:"port"`
+	Autosave    int64  `json:"autosave"`
+	Recursive   bool   `json:"recursive"`
+	AcIgnore    bool   `json:"acIgnore"`
+	AcOverwrite bool   `json:"acOverwrite"`
+	AcClear     bool   `json:"acClear"`
 }
 
 // Check if json is syntactically valid
@@ -103,7 +103,6 @@ func CheckAcClear(job *JobValidate) bool {
 		return true
 	}
 }
-
 
 // Loop through each job and make sure the right settings are there before
 // doing anything

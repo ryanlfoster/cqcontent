@@ -27,7 +27,7 @@ func DownloadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) boo
 type Curl struct {
 	Username string
 	Password string
-	Port	 int64
+	Port     int64
 }
 
 // Augmented struct to hold node value
