@@ -56,8 +56,8 @@ func (lc ListCurl) Xml() ([]byte, *os.File) {
 	// Notify the user and exit with an error code if that is the case
 	if string(output) == "" {
 		color.Red(`
-The output is a zero length string. This typically indicates authentication or
-connection failure
+The output is a zero length string. This typically indicates authentication
+failure
 
 `)
 		os.Exit(1)

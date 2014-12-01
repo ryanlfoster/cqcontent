@@ -119,3 +119,26 @@ func InstallWrapper(
 	installCurl.VerifyInstall()
 
 }
+
+func DeleteWrapper(
+	node string,
+	username string,
+	password string,
+	port int64,
+	pkg string) {
+
+	// Initalize struct
+	deleteCurl := DeleteCurl{
+		UploadCurl: UploadCurl{
+			DownloadCurl: DownloadCurl{
+				ListCurl: ListCurl{
+					Curl: Curl{Username: username, Password: password, Port: port},
+				Node: node},
+			Package: pkg},
+		Uploaded: false}}
+
+	deleteCurl.Delete()
+	deleteCurl.VerifyDelete()
+
+}
+

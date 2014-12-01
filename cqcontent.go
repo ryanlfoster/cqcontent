@@ -94,6 +94,14 @@ func main() {
 			acOverwrite,
 			acClear)
 
+	case "delete":
+		DeleteWrapper(
+			arguments["NODE"].(string),
+			arguments["USERNAME"].(string),
+			arguments["PASSWORD"].(string),
+			StrToInt(arguments["--port"].(string)),
+			arguments["PACKAGE"].(string))
+
 	}
 
 }
