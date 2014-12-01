@@ -24,7 +24,7 @@ curl API, which is documented here: [CQ Curl API](http://docs.adobe.com/docs/en/
 ###Usage
 ```
 Usage:
-  cqcontent file     [options] CONFIG_FILE
+  cqcontent file     CONFIG_FILE
   cqcontent xml      [options]
                      (--node|-n) NODE
                      (--username|-u) USERNAME
