@@ -42,6 +42,11 @@ type DownloadCurl struct {
 	Package string
 }
 
+// Augmented struct
+type DeleteCurl struct {
+	UploadCurl
+}
+
 // Augmented struct to hold pkgpath and node value
 type UploadCurl struct {
 	DownloadCurl

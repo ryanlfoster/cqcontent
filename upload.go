@@ -41,8 +41,8 @@ func (uc UploadCurl) Upload() {
 	defer easy.Cleanup()
 
 	// Set URL String
-	url := fmt.Sprintf("http://%s:8080/crx/packmgr/service/.json/?cmd=upload",
-		uc.Node)
+	url := fmt.Sprintf("http://%s:%d/crx/packmgr/service/.json/?cmd=upload",
+		uc.Node, uc.Port)
 
 	// Set options for curl
 	easy.Setopt(curl.OPT_USERNAME, uc.Username)
@@ -62,6 +62,9 @@ func (uc UploadCurl) Upload() {
 	// Setup Progress
 	easy.Setopt(curl.OPT_PROGRESSFUNCTION, UploadProgress)
 
+	// Set connection timeout
+	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
+
 	// Get to work
 	err := easy.Perform()
 	Check(err)
@@ -73,9 +76,5 @@ func (uc UploadCurl) VerifyUpload() {
 	if uploaded == false {
 		color.Red("The package %s failed to upload.", RelPath(uc.Package))
 		os.Exit(1)
-	} else {
-		fmt.Print("The package %s has been uploaded to %s",
-			RelPath(uc.Package),
-			uc.Node)
 	}
 }

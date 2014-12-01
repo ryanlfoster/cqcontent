@@ -44,25 +44,25 @@ Work with cq content packages on the command line
 Usage:
   cqcontent file     CONFIG_FILE
   cqcontent xml      [options]
-  					 (--node|-n) NODE
+                     (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
   cqcontent list     [options]
-  					 (--node|-n) NODE
+                     (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
   cqcontent download [options]
-  					 (--node|-n) NODE
+                     (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
                      (--package|-k) PACKAGE
   cqcontent upload   [options]
-  					 (--node|-n) NODE
+                     (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
                      (--package|-k) PACKAGE
   cqcontent install  [options]
-  					 (--node|-n) NODE
+                     (--node|-n) NODE
                      (--username|-u) USERNAME
                      (--password|-p) PASSWORD
                      (--package|-k) PACKAGE
@@ -71,6 +71,11 @@ Usage:
                      [--acIgnore]
                      [--acOverwrite]
                      [--acClear]
+  cqcontent delete   [options]
+                     (--node|-n) NODE
+                     (--username|-u) USERNAME
+                     (--password|-p) PASSWORD
+                     (--package|-k) PACKAGE
   cqcontent          [--help|-h|--version]
 
 Options:

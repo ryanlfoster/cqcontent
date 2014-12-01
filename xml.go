@@ -25,8 +25,9 @@ func (lc ListCurl) Xml() ([]byte, *os.File) {
 	defer easy.Cleanup()
 
 	// Set URL String
-	url := fmt.Sprintf("http://%s:8080/crx/packmgr/service.jsp?cmd=ls",
-		lc.Node)
+	url := fmt.Sprintf("http://%s:%d/crx/packmgr/service.jsp?cmd=ls",
+		lc.Node,
+		lc.Port)
 
 	// Set options for curl
 	easy.Setopt(curl.OPT_USERNAME, lc.Username)
@@ -38,6 +39,9 @@ func (lc ListCurl) Xml() ([]byte, *os.File) {
 
 	// Store file pointer
 	easy.Setopt(curl.OPT_WRITEDATA, fp)
+
+	// Set connection timeout
+	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
 
 	// Get to work
 	err = easy.Perform()

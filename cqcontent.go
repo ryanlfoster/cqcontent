@@ -23,14 +23,11 @@ func main() {
 			StrToInt(arguments["--port"].(string)))
 
 	case "list":
-		fp := ListWrapper(
+		ListWrapper(
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			StrToInt(arguments["--port"].(string)))
-
-		// Remove tempfile
-		os.Remove(fp.Name())
 
 	case "download":
 		DownloadWrapper(
@@ -41,14 +38,12 @@ func main() {
 			arguments["PACKAGE"].(string))
 
 	case "upload":
-		fp := UploadWrapper(
+		UploadWrapper(
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			StrToInt(arguments["--port"].(string)),
 			arguments["PACKAGE"].(string))
-		// Remove tempfile
-		os.Remove(fp.Name())
 
 	case "install":
 		// Set declare var for each install option
@@ -87,7 +82,7 @@ func main() {
 		}
 
 		// Pass all arguments and options to the installWrapper
-		fp := InstallWrapper(
+		InstallWrapper(
 			arguments["NODE"].(string),
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
@@ -99,7 +94,6 @@ func main() {
 			acOverwrite,
 			acClear)
 
-		// Remove tempfile
-		os.Remove(fp.Name())
 	}
+
 }

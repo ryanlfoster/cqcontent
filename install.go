@@ -40,13 +40,15 @@ func (ic InstallCurl) Install() {
 	}
 
 	if pkg.Group != "" {
-		url = fmt.Sprintf("http://%s:8080/crx/packmgr/service/.json/etc/packages/%s/%s?cmd=install",
+		url = fmt.Sprintf("http://%s:%d/crx/packmgr/service/.json/etc/packages/%s/%s?cmd=install",
 			ic.Node,
+			ic.Port,
 			pkg.Group,
 			ic.Package)
 	} else {
-		url = fmt.Sprintf("http://%s:8080/crx/packmgr/service/.json/etc/packages/%s?cmd=install",
+		url = fmt.Sprintf("http://%s:%d/crx/packmgr/service/.json/etc/packages/%s?cmd=install",
 			ic.Node,
+			ic.Port,
 			ic.Package)
 	}
 
@@ -89,6 +91,9 @@ func (ic InstallCurl) Install() {
 			fmt.Sprintf("autosave=%d", ic.Autosave))
 	}
 
+	// Set connection timeout
+	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
+
 	// Get to work
 	fmt.Printf("Installing %s. This might take a while\n", ic.Package)
 	err := easy.Perform()
@@ -100,9 +105,5 @@ func (ic InstallCurl) VerifyInstall() {
 	if ic.CheckInstalled() == false {
 		color.Red("The package %s did not successfully install", ic.Package)
 		os.Exit(1)
-	} else {
-		fmt.Print("The package %s has been installed to %s",
-			RelPath(ic.Package),
-			ic.Node)
 	}
 }

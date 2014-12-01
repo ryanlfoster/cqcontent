@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 )
 
@@ -38,13 +37,7 @@ func ListWrapper(
 	node string,
 	username string,
 	password string,
-	port int64) *os.File {
-
-	// Initialize tempfile and get pointer
-	fp, err := ioutil.TempFile("", "cq")
-
-	// Handle possible errors
-	Check(err)
+	port int64) {
 
 	// Initialize struct
 	listCurl := ListCurl{
@@ -54,7 +47,6 @@ func ListWrapper(
 	// Get XML of cq package content for the given node
 	listCurl.List()
 
-	return fp
 }
 
 // Download the package
@@ -82,13 +74,7 @@ func UploadWrapper(
 	username string,
 	password string,
 	port int64,
-	pkg string) *os.File {
-
-	// Initialize tempfile and get pointer
-	fp, err := ioutil.TempFile("", "cq")
-
-	// Handle possible errors
-	Check(err)
+	pkg string) {
 
 	// Initialize struct
 	uploadCurl := UploadCurl{
@@ -101,8 +87,7 @@ func UploadWrapper(
 
 	// Get XML of cq package content for the given node
 	uploadCurl.Upload()
-
-	return fp
+	uploadCurl.VerifyUpload()
 
 }
 
@@ -116,13 +101,7 @@ func InstallWrapper(
 	recursive bool,
 	acIgnore bool,
 	acOverwrite bool,
-	acClear bool) *os.File {
-
-	// Initialize tempfile and get pointer
-	fp, err := ioutil.TempFile("", "cq")
-
-	// Handle possible errors
-	Check(err)
+	acClear bool) {
 
 	// Initialize struct
 	installCurl := InstallCurl{
@@ -137,7 +116,6 @@ func InstallWrapper(
 
 	// Get XML of cq package content for the given node
 	installCurl.Install()
-
-	return fp
+	installCurl.VerifyInstall()
 
 }
