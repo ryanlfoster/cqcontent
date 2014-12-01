@@ -12,21 +12,31 @@ import (
 // to strings for unset values
 type JobValidate struct {
 	Mode           string  `json:"mode"`
-	TargetNode     *string `json:"target_node"`
-	TargetUsername *string `json:"target_username"`
-	TargetPassword *string `json:"target_password"`
+	Node           *string `json:"node"`
+	Username       *string `json:"username"`
+	Password       *string `json:"password"`
 	Package        *string `json:"package"`
 	Port           *int64  `json:"port"`
+	Autosave	   *int64  `json:"autosave"`
+	Recursive      *bool   `json:"recursive"`
+	AcIgnore       *bool   `json:"acIgnore"`
+	AcOverwrite    *bool   `json:"acOverwrite"`
+	AcClear        *bool   `json:"acClear"`
 }
 
 // Use this struct for the JobLoop
 type Job struct {
 	Mode           string `json:"mode"`
-	TargetNode     string `json:"target_node"`
-	TargetUsername string `json:"target_username"`
-	TargetPassword string `json:"target_password"`
+	Node           string `json:"node"`
+	Username       string `json:"username"`
+	Password       string `json:"password"`
 	Package        string `json:"package"`
 	Port           int64  `json:"port"`
+	Autosave	   int64  `json:"autosave"`
+	Recursive      bool   `json:"recursive"`
+	AcIgnore       bool   `json:"acIgnore"`
+	AcOverwrite    bool   `json:"acOverwrite"`
+	AcClear        bool   `json:"acClear"`
 }
 
 // Check if json is syntactically valid
@@ -39,6 +49,61 @@ func isJSON(d []byte) bool {
 		return true
 	}
 }
+
+// Check to see if the port is set since it is optional
+func CheckPort(job *JobValidate) bool {
+	if job.Port == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the port is set since it is optional
+func CheckAutosave(job *JobValidate) bool {
+	if job.Autosave == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the recursive is set since it is optional
+func CheckRecursive(job *JobValidate) bool {
+	if job.Recursive == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the acIgnore is set since it is optional
+func CheckAcIgnore(job *JobValidate) bool {
+	if job.AcIgnore == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the acOverwrite is set since it is optional
+func CheckAcOverwrite(job *JobValidate) bool {
+	if job.AcOverwrite == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the acOverwrite is set since it is optional
+func CheckAcClear(job *JobValidate) bool {
+	if job.AcClear == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
 
 // Loop through each job and make sure the right settings are there before
 // doing anything
@@ -57,61 +122,86 @@ The json configuration file provided is not syntactically valid.
 	for _, job := range jobs {
 		switch job.Mode {
 		case "xml":
-			if job.TargetNode == nil ||
-				job.TargetUsername == nil ||
-				job.TargetPassword == nil {
+			if job.Node == nil ||
+				job.Username == nil ||
+				job.Password == nil {
 
 				color.Red(`
 The following settings are requred for the xml job:
 
-target_node
-target_username
-target_password
+node
+username
+password
 				`)
 				os.Exit(1)
 			}
 
 		case "list":
-			if job.TargetNode == nil ||
-				job.TargetUsername == nil ||
-				job.TargetPassword == nil {
+			if job.Node == nil ||
+				job.Username == nil ||
+				job.Password == nil {
 
 				color.Red(`
-The following settings are requred for the xml job:
+The following settings are requred for the list job:
 
-target_node
-target_username
-target_password
+node
+username
+password
 				`)
 				os.Exit(1)
 			}
 		case "download":
-			if job.TargetNode == nil ||
-				job.TargetUsername == nil ||
-				job.TargetPassword == nil ||
+			if job.Node == nil ||
+				job.Username == nil ||
+				job.Password == nil ||
 				job.Package == nil {
 
 				color.Red(`
-The following settings are requred for the xml job:
+The following settings are requred for the download job:
 
-target_node
-target_username
-target_password
+node
+username
+password
+package
+					`)
+				os.Exit(1)
+
+			}
+		case "upload":
+			if job.Node == nil ||
+				job.Username == nil ||
+				job.Password == nil ||
+				job.Package == nil {
+
+				color.Red(`
+The following settings are requred for the upload job:
+
+node
+username
+password
+package
+					`)
+				os.Exit(1)
+
+			}
+		case "install":
+			if job.Node == nil ||
+				job.Username == nil ||
+				job.Password == nil ||
+				job.Package == nil {
+
+				color.Red(`
+The following settings are requred for the install job:
+
+node
+username
+password
 package
 					`)
 				os.Exit(1)
 
 			}
 		}
-	}
-}
-
-// Check to see if the port is set since it is optional
-func CheckPortSet(job *JobValidate) bool {
-	if job.Port == nil {
-		return false
-	} else {
-		return true
 	}
 }
 
@@ -135,45 +225,117 @@ func JobLoop(path string) {
 		case "xml":
 			// If port was set, then use that value, otherwise, default to 8080
 			var port int64
-			if CheckPortSet(&validateJobs[count]) == true {
+			if CheckPort(&validateJobs[count]) == true {
 				port = job.Port
 			} else {
 				port = 8080
 			}
 			str, _ := XmlWrapper(
-				job.TargetNode,
-				job.TargetUsername,
-				job.TargetPassword,
+				job.Node,
+				job.Username,
+				job.Password,
 				port)
 			fmt.Printf("%s\n", str)
 		case "list":
 			var port int64
-			if CheckPortSet(&validateJobs[count]) == true {
+			if CheckPort(&validateJobs[count]) == true {
 				port = job.Port
 			} else {
 				port = 8080
 			}
 
 			ListWrapper(
-				job.TargetNode,
-				job.TargetUsername,
-				job.TargetPassword,
+				job.Node,
+				job.Username,
+				job.Password,
 				port)
 
 		case "download":
 			// Handle Port
 			var port int64
-			if CheckPortSet(&validateJobs[count]) == true {
+			if CheckPort(&validateJobs[count]) == true {
 				port = job.Port
 			} else {
 				port = 8080
 			}
 			DownloadWrapper(
-				job.TargetNode,
-				job.TargetUsername,
-				job.TargetPassword,
+				job.Node,
+				job.Username,
+				job.Password,
 				port,
 				job.Package)
+		case "upload":
+			// Handle Port
+			var port int64
+			if CheckPort(&validateJobs[count]) == true {
+				port = job.Port
+			} else {
+				port = 8080
+			}
+			UploadWrapper(
+				job.Node,
+				job.Username,
+				job.Password,
+				port,
+				job.Package)
+		case "install":
+			// Handle Port
+			var port int64
+			if CheckPort(&validateJobs[count]) == true {
+				port = job.Port
+			} else {
+				port = 8080
+			}
+
+			// Handle autosave option
+			var autosave int64
+			if CheckAutosave(&validateJobs[count]) == true {
+				autosave = job.Autosave
+			} else {
+				autosave = 0
+			}
+
+			// Handle recursive option
+			var recursive bool
+			if CheckRecursive(&validateJobs[count]) == true {
+				recursive = job.Recursive
+			} else {
+				recursive = false
+			}
+
+			// Handle acIgnore option
+			var acIgnore bool
+			if CheckAcIgnore(&validateJobs[count]) == true {
+				acIgnore = job.AcIgnore
+			} else {
+				acIgnore = false
+			}
+
+			var acOverwrite bool
+			if CheckAcOverwrite(&validateJobs[count]) == true {
+				acOverwrite = job.AcOverwrite
+			} else {
+				acOverwrite = false
+			}
+
+			var acClear bool
+			if CheckAcClear(&validateJobs[count]) == true {
+				acClear = job.AcClear
+			} else {
+				acClear = false
+			}
+
+			InstallWrapper(
+				job.Node,
+				job.Username,
+				job.Password,
+				port,
+				job.Package,
+				autosave,
+				recursive,
+				acIgnore,
+				acOverwrite,
+				acClear)
 		}
 		count += 1
 	}
