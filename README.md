@@ -72,7 +72,7 @@ Options:
         "node": "my.node.net",
         "username": "admin",
         "password": "admin",
-        "package": "test.zip"
+        "package": "test.zip",
         "acIgnore": true
     }
 ]
