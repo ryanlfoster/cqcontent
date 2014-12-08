@@ -74,13 +74,13 @@ func (uc *UploadCurl) Upload() {
 	fmt.Printf("\n")
 }
 
-func (uc *UploadCurl) VerifyUpload(count int64) {
+func (uc *UploadCurl) VerifyUpload(count *int64) {
 
-	if count < uc.VerifyTimeout {
+	if *count < uc.VerifyTimeout {
 		// Verify upload
 		uploaded, _ := uc.CheckUploaded()
 		if uploaded == false {
-			count += 1
+			*count += 1
 			uc.VerifyUpload(count)
 		} else {
 			fmt.Printf("Upload of %s to %s succeeded\n", uc.Package, uc.Node)

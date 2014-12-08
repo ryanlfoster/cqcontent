@@ -88,7 +88,9 @@ func UploadWrapper(
 
 	// Get XML of cq package content for the given node
 	uploadCurl.Upload()
-	uploadCurl.VerifyUpload(0)
+	var count int64 = 0
+	var countPtr *int64 = &count
+	uploadCurl.VerifyUpload(countPtr)
 
 }
 
@@ -118,7 +120,9 @@ func InstallWrapper(
 
 	// Get XML of cq package content for the given node
 	installCurl.Install()
-	installCurl.VerifyInstall(0)
+	var count int64 = 0
+	var countPtr *int64 = &count
+	installCurl.VerifyInstall(countPtr)
 
 }
 
@@ -141,6 +145,8 @@ func DeleteWrapper(
 			Uploaded: false, VerifyTimeout: verifyTimeout}}
 
 	deleteCurl.Delete()
-	deleteCurl.VerifyDelete(0)
+	var count int64 = 0
+	var countPtr *int64 = &count
+	deleteCurl.VerifyDelete(countPtr)
 
 }

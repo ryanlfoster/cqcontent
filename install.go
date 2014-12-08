@@ -103,12 +103,12 @@ func (ic *InstallCurl) Install() {
 
 }
 
-func (ic *InstallCurl) VerifyInstall(count int64) {
+func (ic *InstallCurl) VerifyInstall(count *int64) {
 
-	if count < ic.VerifyTimeout {
+	if *count < ic.VerifyTimeout {
 		// Verify Installation
 		if ic.CheckInstalled() == false {
-			count += 1
+			*count += 1
 			ic.VerifyInstall(count)
 		} else {
 			fmt.Printf("Installation of %s to %s succeeded\n",

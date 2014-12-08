@@ -53,12 +53,12 @@ func (dc *DeleteCurl) Delete() {
 
 }
 
-func (dc *DeleteCurl) VerifyDelete(count int64) {
+func (dc *DeleteCurl) VerifyDelete(count *int64) {
 
-	if count < dc.VerifyTimeout {
+	if *count < dc.VerifyTimeout {
 		result, _ := dc.CheckUploaded()
 		if result == true {
-			count += 1
+			*count += 1
 			dc.VerifyDelete(count)
 		}
 	} else {
