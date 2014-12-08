@@ -49,9 +49,8 @@ Usage:
 
 Options:
   --port PORT        Specify the port. [default: 8080]
-  --vt TIMEOUT       Verification timeout in seconds for 
-                     the upload, download, or install 
-                     actions [default: 60]
+  --vt TIMEOUT       Verification timeout in seconds for the upload, download, 
+                     or install actions [default: 60]
 ```
 ###Sample Configuration file
 ```json
