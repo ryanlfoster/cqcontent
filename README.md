@@ -52,7 +52,7 @@ Options:
   --vt TIMEOUT       Verification timeout in seconds for the upload, download, 
                      or install actions [default: 60]
 ```
-###Sample Configuration file
+###Sample configuration file
 ```json
 [
     {
