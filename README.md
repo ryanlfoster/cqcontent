@@ -1,8 +1,10 @@
 cqcontent
 =========
 
-cqcontent is a cq content package handler written in Go (i.e. Golang). No shelling out
-means no extra dependencies. Each sub-command does what you would expect. 
+cqcontent is a cq content package handler written in Go (i.e. Golang). The command-line interface
+makes it easier to integrate content package deployments into continuous integration and/or 
+continuous delivery pipelines. No shelling out means no extra dependencies. Each subcommand 
+does what you would expect. 
 
 The file subcommand reads a json configuration file and loops through each specified job 
 in the array of jobs. It'll first validate json syntax. Next, it'll validate the configuration. 
