@@ -8,14 +8,6 @@ The file subcommand reads a json configuration file and loops through each speci
 in the array of jobs. It'll first validate json syntax. Next, it'll validate the configuration. 
 Lastly, it'll loop through each job and execute. 
 
-###Developing cqcontent
-
-See go-curl for more insight into Go's libcurl bindings if
-you care to hack on this project. Additionally, it relies on CQ's 
-curl API, which is documented here: [CQ Curl API](http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Managing Packages on the Command Line)
-
-Since go-curl makes use of cgo, you can't take shortcuts with cross-compilation. If you
-need to build for environments other than your development machine, try Vagrant or Docker. 
 ###Usage
 ```
 Usage:
@@ -57,6 +49,9 @@ Usage:
 
 Options:
   --port PORT        Specify the port. [default: 8080]
+  --vt TIMEOUT       Verification timeout in seconds for 
+                     the upload, download, or install 
+                     actions [default: 60]
 ```
 ###Sample Configuration file
 ```json
@@ -77,5 +72,13 @@ Options:
         "acIgnore": true
     }
 ]
-
 ```
+
+###Developing cqcontent
+
+See go-curl for more insight into Go's libcurl bindings if
+you care to hack on this project. Additionally, it relies on CQ's 
+curl API, which is documented here: [CQ Curl API](http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Managing Packages on the Command Line)
+
+Since go-curl makes use of cgo, you can't take shortcuts with cross-compilation. If you
+need to build for environments other than your development machine, try Vagrant or Docker. 
