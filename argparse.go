@@ -80,6 +80,8 @@ Usage:
 
 Options:
   --port PORT        Specify the port. [default: 8080]
+  --vt TIMEOUT       Specify the amount of time to allow for verification
+                     for the upload, download, or install actions [default: 60]
 `
 	// Takes usage statement, argument list, help bool, version, and
 	// optionsFirst bool. Returns a map.

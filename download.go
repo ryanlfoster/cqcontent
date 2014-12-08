@@ -63,13 +63,13 @@ func (dc *DownloadCurl) Download() []byte {
 	easy.Setopt(curl.OPT_WRITEDATA, fp)
 
 	// Print upload progress
-	easy.Setopt(curl.OPT_NOPROGRESS, true)
+	easy.Setopt(curl.OPT_NOPROGRESS, false)
 
 	// Set connection timeout
 	easy.Setopt(curl.OPT_CONNECTTIMEOUT, 10)
 
-	//	// Setup Progress
-	//	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
+	// Setup Progress
+	easy.Setopt(curl.OPT_PROGRESSFUNCTION, DownloadProgress)
 
 	// Get to work
 	err = easy.Perform()
@@ -90,6 +90,8 @@ failure
 `)
 		os.Exit(1)
 	}
+
+	fmt.Printf("\n")
 
 	return output
 

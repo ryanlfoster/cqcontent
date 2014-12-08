@@ -28,6 +28,8 @@ func (ic *InstallCurl) Install() {
 	var url string
 	fileName := RelPath(ic.Package)
 
+	fmt.Printf("Installing %s to %s\n", ic.Package, ic.Node)
+
 	result, pkg := ic.CheckUploaded()
 	if result == false {
 		color.Red("Could not locate %s on %s", ic.Package, ic.Node)
@@ -98,12 +100,22 @@ func (ic *InstallCurl) Install() {
 	fmt.Printf("Installing %s. This might take a while\n", ic.Package)
 	err := easy.Perform()
 	Check(err)
+
 }
 
-func (ic *InstallCurl) VerifyInstall() {
-	// Verify Installation
-	if ic.CheckInstalled() == false {
-		color.Red("The package %s did not successfully install", ic.Package)
+func (ic *InstallCurl) VerifyInstall(count int64) {
+
+	if count < ic.VerifyTimeout {
+		// Verify Installation
+		if ic.CheckInstalled() == false {
+			count += 1
+			ic.VerifyInstall(count)
+		} else {
+			fmt.Printf("Installation of %s to %s succeeded\n",
+				ic.Package, ic.Node)
+		}
+	} else {
+		color.Red("The package %s did not successfully install\n", ic.Package)
 		os.Exit(1)
 	}
 }

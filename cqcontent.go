@@ -43,6 +43,7 @@ func main() {
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			StrToInt(arguments["--port"].(string)),
+			StrToInt(arguments["--vt"].(string)),
 			arguments["PACKAGE"].(string))
 
 	case "install":
@@ -87,6 +88,7 @@ func main() {
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			StrToInt(arguments["--port"].(string)),
+			StrToInt(arguments["--vt"].(string)),
 			arguments["PACKAGE"].(string),
 			autosave,
 			recursive,
@@ -100,8 +102,8 @@ func main() {
 			arguments["USERNAME"].(string),
 			arguments["PASSWORD"].(string),
 			StrToInt(arguments["--port"].(string)),
+			StrToInt(arguments["--vt"].(string)),
 			arguments["PACKAGE"].(string))
-
 	}
 
 }

@@ -33,7 +33,8 @@ type DeleteCurl struct {
 // Augmented struct to hold pkgpath and node value
 type UploadCurl struct {
 	*DownloadCurl
-	Uploaded bool
+	Uploaded      bool
+	VerifyTimeout int64
 }
 
 // Augmented struct

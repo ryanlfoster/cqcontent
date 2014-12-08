@@ -11,32 +11,34 @@ import (
 // Use this struct for CheckValueLoop so you can check for nil against pointers
 // to strings for unset values
 type JobValidate struct {
-	Mode        string  `json:"mode"`
-	Node        *string `json:"node"`
-	Username    *string `json:"username"`
-	Password    *string `json:"password"`
-	Package     *string `json:"package"`
-	Port        *int64  `json:"port"`
-	Autosave    *int64  `json:"autosave"`
-	Recursive   *bool   `json:"recursive"`
-	AcIgnore    *bool   `json:"acIgnore"`
-	AcOverwrite *bool   `json:"acOverwrite"`
-	AcClear     *bool   `json:"acClear"`
+	Mode          string  `json:"mode"`
+	Node          *string `json:"node"`
+	Username      *string `json:"username"`
+	Password      *string `json:"password"`
+	Package       *string `json:"package"`
+	Port          *int64  `json:"port"`
+	VerifyTimeout *int64  `json:"verify_timeout"`
+	Autosave      *int64  `json:"autosave"`
+	Recursive     *bool   `json:"recursive"`
+	AcIgnore      *bool   `json:"acIgnore"`
+	AcOverwrite   *bool   `json:"acOverwrite"`
+	AcClear       *bool   `json:"acClear"`
 }
 
 // Use this struct for the JobLoop
 type Job struct {
-	Mode        string `json:"mode"`
-	Node        string `json:"node"`
-	Username    string `json:"username"`
-	Password    string `json:"password"`
-	Package     string `json:"package"`
-	Port        int64  `json:"port"`
-	Autosave    int64  `json:"autosave"`
-	Recursive   bool   `json:"recursive"`
-	AcIgnore    bool   `json:"acIgnore"`
-	AcOverwrite bool   `json:"acOverwrite"`
-	AcClear     bool   `json:"acClear"`
+	Mode          string `json:"mode"`
+	Node          string `json:"node"`
+	Username      string `json:"username"`
+	Password      string `json:"password"`
+	Package       string `json:"package"`
+	Port          int64  `json:"port"`
+	VerifyTimeout int64  `json:"verify_timeout"`
+	Autosave      int64  `json:"autosave"`
+	Recursive     bool   `json:"recursive"`
+	AcIgnore      bool   `json:"acIgnore"`
+	AcOverwrite   bool   `json:"acOverwrite"`
+	AcClear       bool   `json:"acClear"`
 }
 
 // Check if json is syntactically valid
@@ -53,6 +55,15 @@ func isJSON(d []byte) bool {
 // Check to see if the port is set since it is optional
 func CheckPort(job *JobValidate) bool {
 	if job.Port == nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+// Check to see if the verify timeout is set since it is optional
+func CheckVerifyTimeout(job *JobValidate) bool {
+	if job.VerifyTimeout == nil {
 		return false
 	} else {
 		return true
@@ -271,11 +282,19 @@ func JobLoop(path string) {
 			} else {
 				port = 8080
 			}
+			// Handle VerifyTimeout
+			var vt int64
+			if CheckVerifyTimeout(&validateJobs[count]) == true {
+				vt = job.VerifyTimeout
+			} else {
+				vt = 60
+			}
 			UploadWrapper(
 				job.Node,
 				job.Username,
 				job.Password,
 				port,
+				vt,
 				job.Package)
 		case "install":
 			// Handle Port
@@ -284,6 +303,14 @@ func JobLoop(path string) {
 				port = job.Port
 			} else {
 				port = 8080
+			}
+
+			// Handle VerifyTimeout
+			var vt int64
+			if CheckVerifyTimeout(&validateJobs[count]) == true {
+				vt = job.VerifyTimeout
+			} else {
+				vt = 60
 			}
 
 			// Handle autosave option
@@ -329,12 +356,38 @@ func JobLoop(path string) {
 				job.Username,
 				job.Password,
 				port,
+				vt,
 				job.Package,
 				autosave,
 				recursive,
 				acIgnore,
 				acOverwrite,
 				acClear)
+
+		case "delete":
+			// Handle Port
+			var port int64
+			if CheckPort(&validateJobs[count]) == true {
+				port = job.Port
+			} else {
+				port = 8080
+			}
+
+			// Handle VerifyTimeout
+			var vt int64
+			if CheckVerifyTimeout(&validateJobs[count]) == true {
+				vt = job.VerifyTimeout
+			} else {
+				vt = 60
+			}
+
+			DeleteWrapper(
+				job.Node,
+				job.Username,
+				job.Password,
+				port,
+				vt,
+				job.Package)
 		}
 		count += 1
 	}

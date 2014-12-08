@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	curl "github.com/andelf/go-curl"
 	"github.com/fatih/color"
-	"fmt"
 	"os"
 )
 
@@ -53,9 +53,15 @@ func (dc *DeleteCurl) Delete() {
 
 }
 
-func (dc *DeleteCurl) VerifyDelete() {
-	result, _ := dc.CheckUploaded()
-	if result == true {
+func (dc *DeleteCurl) VerifyDelete(count int64) {
+
+	if count < dc.VerifyTimeout {
+		result, _ := dc.CheckUploaded()
+		if result == true {
+			count += 1
+			dc.VerifyDelete(count)
+		}
+	} else {
 		color.Red("The package %s failed to delete.", dc.Package)
 		os.Exit(1)
 	}

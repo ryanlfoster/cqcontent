@@ -37,6 +37,8 @@ func (uc *UploadCurl) Upload() {
 		os.Exit(1)
 	}
 
+	fmt.Printf("Uploading %s to %s\n", uc.Package, uc.Node)
+
 	easy := curl.EasyInit()
 	defer easy.Cleanup()
 
@@ -68,13 +70,24 @@ func (uc *UploadCurl) Upload() {
 	// Get to work
 	err := easy.Perform()
 	Check(err)
+
+	fmt.Printf("\n")
 }
 
-func (uc *UploadCurl) VerifyUpload() {
-	// Verify upload
-	uploaded, _ := uc.CheckUploaded()
-	if uploaded == false {
-		color.Red("The package %s failed to upload.", RelPath(uc.Package))
+func (uc *UploadCurl) VerifyUpload(count int64) {
+
+	if count < uc.VerifyTimeout {
+		// Verify upload
+		uploaded, _ := uc.CheckUploaded()
+		if uploaded == false {
+			count += 1
+			uc.VerifyUpload(count)
+		} else {
+			fmt.Printf("Upload of %s to %s succeeded\n", uc.Package, uc.Node)
+		}
+	} else {
+		color.Red("The package %s failed to upload.\n", RelPath(uc.Package))
 		os.Exit(1)
 	}
+
 }

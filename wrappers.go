@@ -74,6 +74,7 @@ func UploadWrapper(
 	username string,
 	password string,
 	port int64,
+	verifyTimeout int64,
 	pkg string) {
 
 	// Initialize struct
@@ -83,11 +84,11 @@ func UploadWrapper(
 				Curl: &Curl{Username: username, Password: password, Port: port},
 				Node: node},
 			Package: pkg},
-		Uploaded: false}
+		Uploaded: false, VerifyTimeout: verifyTimeout}
 
 	// Get XML of cq package content for the given node
 	uploadCurl.Upload()
-	uploadCurl.VerifyUpload()
+	uploadCurl.VerifyUpload(0)
 
 }
 
@@ -96,6 +97,7 @@ func InstallWrapper(
 	username string,
 	password string,
 	port int64,
+	verifyTimeout int64,
 	pkg string,
 	autosave int64,
 	recursive bool,
@@ -111,12 +113,12 @@ func InstallWrapper(
 					Curl: &Curl{Username: username, Password: password, Port: port},
 					Node: node},
 				Package: pkg},
-			Uploaded: false},
+			Uploaded: false, VerifyTimeout: verifyTimeout},
 		Installed: false, Autosave: autosave, Recursive: recursive, AcIgnore: acIgnore, AcOverwrite: acOverwrite, AcClear: acClear}
 
 	// Get XML of cq package content for the given node
 	installCurl.Install()
-	installCurl.VerifyInstall()
+	installCurl.VerifyInstall(0)
 
 }
 
@@ -125,6 +127,7 @@ func DeleteWrapper(
 	username string,
 	password string,
 	port int64,
+	verifyTimeout int64,
 	pkg string) {
 
 	// Initalize struct
@@ -133,12 +136,11 @@ func DeleteWrapper(
 			DownloadCurl: &DownloadCurl{
 				ListCurl: &ListCurl{
 					Curl: &Curl{Username: username, Password: password, Port: port},
-				Node: node},
-			Package: pkg},
-		Uploaded: false}}
+					Node: node},
+				Package: pkg},
+			Uploaded: false, VerifyTimeout: verifyTimeout}}
 
 	deleteCurl.Delete()
-	deleteCurl.VerifyDelete()
+	deleteCurl.VerifyDelete(0)
 
 }
-

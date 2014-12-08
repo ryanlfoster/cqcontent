@@ -3,13 +3,13 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"github.com/fatih/color"
 	"io"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
-	"fmt"
 )
 
 // Generic error handling function
