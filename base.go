@@ -8,21 +8,7 @@ the --libcurl option to the curl binary is your friend.
 
 package main
 
-import (
-	"fmt"
-)
-
-// Progress for uploading
-func UploadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
-	fmt.Printf("Uploading %3.2f%%\r", ulnow/ultotal*100)
-	return true
-}
-
-// Progress for downloading
-func DownloadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
-	fmt.Printf("Downloading %3.2f%%\r", dlnow/dltotal*100)
-	return true
-}
+// Structs for each action
 
 type Curl struct {
 	Username string
@@ -30,26 +16,23 @@ type Curl struct {
 	Port     int64
 }
 
-// Augmented struct to hold node value
 type ListCurl struct {
-	Curl
+	*Curl
 	Node string
 }
 
-// Augmented struct to hold content package value and node
 type DownloadCurl struct {
-	ListCurl
+	*ListCurl
 	Package string
 }
 
-// Augmented struct
 type DeleteCurl struct {
-	UploadCurl
+	*UploadCurl
 }
 
 // Augmented struct to hold pkgpath and node value
 type UploadCurl struct {
-	DownloadCurl
+	*DownloadCurl
 	Uploaded bool
 }
 
@@ -69,7 +52,7 @@ type UploadCurl struct {
 //
 // http://docs.adobe.com/docs/en/crx/current/how_to/package_manager.html#Installing packages (CLI)
 type InstallCurl struct {
-	UploadCurl
+	*UploadCurl
 	Installed   bool
 	Autosave    int64
 	Recursive   bool

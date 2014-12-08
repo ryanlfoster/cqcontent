@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func (dc DownloadCurl) Download() []byte {
+func (dc *DownloadCurl) Download() []byte {
 	var decoder *Crx
 	var foundPackage *Package
 	var url string

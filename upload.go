@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func (uc UploadCurl) CheckUploaded() (bool, *Package) {
+func (uc *UploadCurl) CheckUploaded() (bool, *Package) {
 	pkgFound := false
 	var decoder *Crx
 	decoder = uc.Decoder()
@@ -23,7 +23,7 @@ func (uc UploadCurl) CheckUploaded() (bool, *Package) {
 	return pkgFound, foundPackage
 }
 
-func (uc UploadCurl) Upload() {
+func (uc *UploadCurl) Upload() {
 
 	result, _ := uc.CheckUploaded()
 	if result == true {
@@ -70,7 +70,7 @@ func (uc UploadCurl) Upload() {
 	Check(err)
 }
 
-func (uc UploadCurl) VerifyUpload() {
+func (uc *UploadCurl) VerifyUpload() {
 	// Verify upload
 	uploaded, _ := uc.CheckUploaded()
 	if uploaded == false {

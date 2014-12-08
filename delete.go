@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func (dc DeleteCurl) Delete() {
+func (dc *DeleteCurl) Delete() {
 
 	// Check to see if the content package is even there
 	result, pkg := dc.CheckUploaded()
@@ -53,7 +53,7 @@ func (dc DeleteCurl) Delete() {
 
 }
 
-func (dc DeleteCurl) VerifyDelete() {
+func (dc *DeleteCurl) VerifyDelete() {
 	result, _ := dc.CheckUploaded()
 	if result == true {
 		color.Red("The package %s failed to delete.", dc.Package)

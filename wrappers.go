@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// Do work based on the json configuraiton file
+// Do work based on the json configuration file
 func JsonWrapper(path string) {
 	CheckValueLoop(path)
 	JobLoop(path)
@@ -19,8 +19,8 @@ func XmlWrapper(
 	port int64) ([]byte, *os.File) {
 
 	// Initialize struct
-	listCurl := ListCurl{
-		Curl: Curl{Username: username, Password: password, Port: port},
+	listCurl := &ListCurl{
+		Curl: &Curl{Username: username, Password: password, Port: port},
 		Node: node}
 
 	// Get XML of cq package content for the given node
@@ -40,8 +40,8 @@ func ListWrapper(
 	port int64) {
 
 	// Initialize struct
-	listCurl := ListCurl{
-		Curl: Curl{Username: username, Password: password, Port: port},
+	listCurl := &ListCurl{
+		Curl: &Curl{Username: username, Password: password, Port: port},
 		Node: node}
 
 	// Get XML of cq package content for the given node
@@ -58,9 +58,9 @@ func DownloadWrapper(
 	pkg string) {
 
 	// Initialize struct
-	downloadCurl := DownloadCurl{
-		ListCurl: ListCurl{
-			Curl: Curl{Username: username, Password: password, Port: port},
+	downloadCurl := &DownloadCurl{
+		ListCurl: &ListCurl{
+			Curl: &Curl{Username: username, Password: password, Port: port},
 			Node: node},
 		Package: pkg}
 
@@ -77,10 +77,10 @@ func UploadWrapper(
 	pkg string) {
 
 	// Initialize struct
-	uploadCurl := UploadCurl{
-		DownloadCurl: DownloadCurl{
-			ListCurl: ListCurl{
-				Curl: Curl{Username: username, Password: password, Port: port},
+	uploadCurl := &UploadCurl{
+		DownloadCurl: &DownloadCurl{
+			ListCurl: &ListCurl{
+				Curl: &Curl{Username: username, Password: password, Port: port},
 				Node: node},
 			Package: pkg},
 		Uploaded: false}
@@ -104,11 +104,11 @@ func InstallWrapper(
 	acClear bool) {
 
 	// Initialize struct
-	installCurl := InstallCurl{
-		UploadCurl: UploadCurl{
-			DownloadCurl: DownloadCurl{
-				ListCurl: ListCurl{
-					Curl: Curl{Username: username, Password: password, Port: port},
+	installCurl := &InstallCurl{
+		UploadCurl: &UploadCurl{
+			DownloadCurl: &DownloadCurl{
+				ListCurl: &ListCurl{
+					Curl: &Curl{Username: username, Password: password, Port: port},
 					Node: node},
 				Package: pkg},
 			Uploaded: false},
@@ -128,11 +128,11 @@ func DeleteWrapper(
 	pkg string) {
 
 	// Initalize struct
-	deleteCurl := DeleteCurl{
-		UploadCurl: UploadCurl{
-			DownloadCurl: DownloadCurl{
-				ListCurl: ListCurl{
-					Curl: Curl{Username: username, Password: password, Port: port},
+	deleteCurl := &DeleteCurl{
+		UploadCurl: &UploadCurl{
+			DownloadCurl: &DownloadCurl{
+				ListCurl: &ListCurl{
+					Curl: &Curl{Username: username, Password: password, Port: port},
 				Node: node},
 			Package: pkg},
 		Uploaded: false}}

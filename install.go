@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func (ic InstallCurl) CheckInstalled() bool {
+func (ic *InstallCurl) CheckInstalled() bool {
 	pkgFound := false
 	var decoder *Crx
 	decoder = ic.Decoder()
@@ -24,7 +24,7 @@ func (ic InstallCurl) CheckInstalled() bool {
 	return pkgFound
 }
 
-func (ic InstallCurl) Install() {
+func (ic *InstallCurl) Install() {
 	var url string
 	fileName := RelPath(ic.Package)
 
@@ -100,7 +100,7 @@ func (ic InstallCurl) Install() {
 	Check(err)
 }
 
-func (ic InstallCurl) VerifyInstall() {
+func (ic *InstallCurl) VerifyInstall() {
 	// Verify Installation
 	if ic.CheckInstalled() == false {
 		color.Red("The package %s did not successfully install", ic.Package)

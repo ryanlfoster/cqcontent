@@ -9,7 +9,7 @@ import (
 )
 
 // Implementation of Xml()
-func (lc ListCurl) Xml() ([]byte, *os.File) {
+func (lc *ListCurl) Xml() ([]byte, *os.File) {
 
 	// Initialize tempfile and get pointer
 	fp, err := ioutil.TempFile("", "cq")

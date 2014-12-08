@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // Implementation of the List method. See Decoder method for more information
-func (lc ListCurl) List() {
+func (lc *ListCurl) List() {
 	var decoder *Crx
 	decoder = lc.Decoder()
 

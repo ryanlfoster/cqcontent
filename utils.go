@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"fmt"
 )
 
 // Generic error handling function
@@ -19,7 +20,6 @@ func Check(err error) {
 	}
 }
 
-// Convert string to int64
 func StrToInt(s string) int64 {
 	num, err := strconv.ParseInt(s, 10, 0)
 	Check(err)
@@ -110,4 +110,14 @@ func FileExists(str string) (bool, string) {
 	} else {
 		return false, ""
 	}
+}
+
+func UploadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
+	fmt.Printf("Uploading %3.2f%%\r", ulnow/ultotal*100)
+	return true
+}
+
+func DownloadProgress(dltotal, dlnow, ultotal, ulnow float64, _ interface{}) bool {
+	fmt.Printf("Downloading %3.2f%%\r", dlnow/dltotal*100)
+	return true
 }
